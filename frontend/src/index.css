@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #111827;
+  background: #ffffff;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #ffffff;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  color: #ffffff;
+  background: #ff7c3b;
+}
+
+@layer components {
+  .container-premium {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-10;
+  }
+
+  .section-pad {
+    @apply py-16 md:py-24 lg:py-28;
+  }
+
+  .focus-ring {
+    @apply outline-none ring-offset-2 ring-offset-white focus-visible:ring-2 focus-visible:ring-accent;
+  }
+
+  .premium-card {
+    @apply rounded-xl border border-black/5 bg-white shadow-[0_18px_50px_rgba(7,27,79,0.08)] transition duration-300;
+  }
+
+  .nav-link {
+    @apply text-[15px] font-semibold text-ink/80 transition hover:text-accent;
+  }
+
+  .admin-input {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20;
+  }
+}
