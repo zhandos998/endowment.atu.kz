@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'enu-admin-auth',
+      name: 'atu-admin-auth',
     },
   ),
 );

@@ -25,6 +25,8 @@ class SiteSettingController extends Controller
     {
         $data = $request->validated();
         $data['hero_image'] = $this->storeUploadedImage($request, 'hero_image', 'settings');
+        $data['fund_logo'] = $this->storeUploadedImage($request, 'fund_logo', 'settings');
+        $data['executive_director_photo'] = $this->storeUploadedImage($request, 'executive_director_photo', 'settings');
 
         return SiteSettingResource::make(SiteSetting::query()->create($data));
     }
@@ -38,6 +40,8 @@ class SiteSettingController extends Controller
     {
         $data = $request->validated();
         $data['hero_image'] = $this->storeUploadedImage($request, 'hero_image', 'settings', $setting->hero_image);
+        $data['fund_logo'] = $this->storeUploadedImage($request, 'fund_logo', 'settings', $setting->fund_logo);
+        $data['executive_director_photo'] = $this->storeUploadedImage($request, 'executive_director_photo', 'settings', $setting->executive_director_photo);
         $setting->update($data);
 
         return SiteSettingResource::make($setting->refresh());
@@ -46,6 +50,8 @@ class SiteSettingController extends Controller
     public function destroy(SiteSetting $setting)
     {
         $this->deleteStoredImage($setting->hero_image);
+        $this->deleteStoredImage($setting->fund_logo);
+        $this->deleteStoredImage($setting->executive_director_photo);
         $setting->delete();
 
         return response()->noContent();

@@ -8,7 +8,7 @@ import { referenceImages } from '../../data/fallback';
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login, token } = useAuthStore();
-  const [email, setEmail] = useState('admin@endowmentenu.kz');
+  const [email, setEmail] = useState('admin@atu.edu.kz');
   const [password, setPassword] = useState('password');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function LoginPage() {
         <img src={referenceImages.hero} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-r from-navy/80 to-navy/50" />
         <div className="absolute bottom-14 left-14 max-w-xl text-white">
-          <img src={referenceImages.logo} alt="ENU Endowment Fund" className="mb-8 h-16 rounded-sm bg-white p-1" />
+          <img src={referenceImages.logo} alt="ATU Endowment Fund" className="mb-8 h-16 rounded-sm bg-white p-1" />
           <h1 className="text-5xl font-semibold leading-tight">Админ-панель фонда</h1>
           <p className="mt-5 text-lg font-light leading-8 text-white/70">Управление новостями, стипендиями, партнёрами, командой и публичным контентом сайта.</p>
         </div>

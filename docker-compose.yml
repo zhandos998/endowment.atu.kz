@@ -1,0 +1,103 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-endowment_atu}
+      MYSQL_USER: ${MYSQL_USER:-endowment}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-endowment}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:5.2-apache
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
+    ports:
+      - "${PHPMYADMIN_BIND:-127.0.0.1}:${PHPMYADMIN_PORT:-8091}:80"
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_NAME: "ATU Endowment Fund"
+      APP_ENV: ${APP_ENV:-production}
+      APP_KEY: ${APP_KEY:-base64:tj/XDqGerQUhvJ49FwfZir7n0KRAgN6r2m6T54H+5Hg=}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_TIMEZONE: Asia/Qyzylorda
+      APP_URL: ${SITE_URL:-https://endowment-test.atu.kz}
+      APP_LOCALE: ru
+      APP_FALLBACK_LOCALE: ru
+      APP_FAKER_LOCALE: ru_RU
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${MYSQL_DATABASE:-endowment_atu}
+      DB_USERNAME: ${MYSQL_USER:-endowment}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-endowment}
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      FILESYSTEM_DISK: public
+      LOG_CHANNEL: stderr
+      MAIL_MAILER: smtp
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: ${MAIL_USERNAME:-endowment@atu.edu.kz}
+      MAIL_PASSWORD: ${GOOGLE_MAIL_PASSWORD:-}
+      MAIL_ENCRYPTION: tls
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-endowment@atu.edu.kz}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-ATU Endowment Fund}
+    volumes:
+      - backend-public-storage:/var/www/html/storage/app/public
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${SITE_HTTP_PORT:-8090}:80"
+
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    profiles:
+      - production
+    depends_on:
+      - frontend
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-endowment-test.atu.kz}
+      CADDY_EMAIL: ${CADDY_EMAIL:-endowment@atu.edu.kz}
+    ports:
+      - "${CADDY_HTTP_PORT:-80}:80"
+      - "${CADDY_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  mysql-data:
+  backend-public-storage:
+  caddy-data:
+  caddy-config:

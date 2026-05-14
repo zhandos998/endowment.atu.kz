@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('hero_subtitle')->nullable();
             $table->string('hero_image')->nullable();
             $table->string('hero_cta_primary')->nullable();
-            $table->string('hero_cta_secondary')->nullable();
             $table->json('statistics')->nullable();
             $table->timestamps();
         });

@@ -23,7 +23,10 @@ class TeamMemberResource extends JsonResource
             'role' => $this->role,
             'photo' => $this->photo,
             'photo_url' => $this->mediaUrl($this->photo),
-            'bio' => $this->bio,
+            'regalia' => $this->regalia,
+            'category' => $this->category,
+            'sort_order' => $this->sort_order,
+            'is_active' => $this->is_active,
         ];
     }
 }

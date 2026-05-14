@@ -25,6 +25,9 @@ class StoreScholarshipRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
+            'conditions' => ['nullable', 'string'],
+            'application_steps' => ['nullable', 'string'],
+            'required_documents' => ['nullable', 'string'],
             'amount' => ['required', 'numeric', 'min:0'],
             'deadline' => ['nullable', 'date'],
         ];

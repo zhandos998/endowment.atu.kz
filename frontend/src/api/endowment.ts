@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { ApiCollection, Donation, FaqItem, HomePayload, NewsItem, Partner, Scholarship, SiteSetting, TeamMember } from '../types';
+import type { ApiCollection, ContactMessage, Donation, FaqItem, HomePayload, NewsItem, Partner, Scholarship, ScholarshipApplication, SiteSetting, TeamMember } from '../types';
 
 export const publicApi = {
   async home() {
@@ -36,6 +36,14 @@ export const publicApi = {
   },
   async donate(payload: Omit<Donation, 'id' | 'created_at'>) {
     const { data } = await api.post<{ data: Donation }>('/donations', payload);
+    return data.data;
+  },
+  async contactMessage(payload: Omit<ContactMessage, 'id' | 'status' | 'admin_note' | 'created_at'>) {
+    const { data } = await api.post<{ data: ContactMessage }>('/contact-messages', payload);
+    return data.data;
+  },
+  async applyScholarship(payload: FormData) {
+    const { data } = await api.post<{ data: ScholarshipApplication }>('/scholarship-applications', payload);
     return data.data;
   },
 };

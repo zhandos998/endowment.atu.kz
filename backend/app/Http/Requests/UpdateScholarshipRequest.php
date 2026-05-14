@@ -25,6 +25,9 @@ class UpdateScholarshipRequest extends FormRequest
         return [
             'title' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['sometimes', 'required', 'string'],
+            'conditions' => ['nullable', 'string'],
+            'application_steps' => ['nullable', 'string'],
+            'required_documents' => ['nullable', 'string'],
             'amount' => ['sometimes', 'required', 'numeric', 'min:0'],
             'deadline' => ['nullable', 'date'],
         ];

@@ -8,6 +8,7 @@ use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Http\Resources\NewsResource;
 use App\Models\News;
+use App\Support\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -31,6 +32,7 @@ class NewsController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['slug'] ?? $data['title']);
+        $data['content'] = HtmlSanitizer::sanitize($data['content']);
         $data['image'] = $this->storeUploadedImage($request, 'image', 'news');
 
         return NewsResource::make(News::query()->create($data));
@@ -47,6 +49,10 @@ class NewsController extends Controller
 
         if (array_key_exists('title', $data) || array_key_exists('slug', $data)) {
             $data['slug'] = $this->uniqueSlug($data['slug'] ?? $data['title'] ?? $news->title, $news->id);
+        }
+
+        if (array_key_exists('content', $data)) {
+            $data['content'] = HtmlSanitizer::sanitize($data['content']);
         }
 
         $data['image'] = $this->storeUploadedImage($request, 'image', 'news', $news->image);

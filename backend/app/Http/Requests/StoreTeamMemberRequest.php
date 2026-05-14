@@ -26,7 +26,10 @@ class StoreTeamMemberRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'role' => ['required', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'max:4096'],
-            'bio' => ['nullable', 'string'],
+            'regalia' => ['nullable', 'string'],
+            'category' => ['nullable', 'string', 'max:40'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
         ];
     }
 }

@@ -6,7 +6,7 @@ import { fallbackPartners, referenceImages } from '../data/fallback';
 export default function PartnersPage() {
   return (
     <>
-      <PageHero title="Партнёры" description="Организации и сообщества, которые помогают фонду развивать возможности студентов ENU." />
+      <PageHero title="Партнёры" description="Организации и сообщества, которые помогают фонду развивать возможности студентов АТУ." />
       <section className="section-pad bg-smoke">
         <div className="container-premium">
           <SectionHeader title="Партнёрская экосистема" />

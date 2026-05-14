@@ -9,7 +9,7 @@ export const api = axios.create({
 
 function readPersistedToken(): string | null {
   try {
-    const persisted = localStorage.getItem('enu-admin-auth');
+    const persisted = localStorage.getItem('atu-admin-auth');
     return persisted ? JSON.parse(persisted)?.state?.token : null;
   } catch {
     return null;

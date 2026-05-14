@@ -9,6 +9,9 @@ class Scholarship extends Model
     protected $fillable = [
         'title',
         'description',
+        'conditions',
+        'application_steps',
+        'required_documents',
         'amount',
         'deadline',
     ];

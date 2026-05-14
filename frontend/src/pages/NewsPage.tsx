@@ -1,20 +1,41 @@
 import { ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { publicApi } from '../api/endowment';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import PageHero from '../components/ui/PageHero';
 import SectionHeader from '../components/ui/SectionHeader';
-import { fallbackNews, referenceImages } from '../data/fallback';
+import { fallbackNews, fallbackSettings, referenceImages } from '../data/fallback';
+import { useContentStore } from '../store/contentStore';
+import type { NewsItem } from '../types';
 import { formatDate } from '../utils/format';
 
 export default function NewsPage() {
+  const [news, setNews] = useState<NewsItem[]>(fallbackNews);
+  const settings = useContentStore((state) => state.home.settings) ?? fallbackSettings;
+
+  useEffect(() => {
+    publicApi
+      .news()
+      .then((items) => {
+        if (items.length) {
+          setNews(items);
+        }
+      })
+      .catch(() => setNews(fallbackNews));
+  }, []);
+
   return (
     <>
-      <PageHero title="Новости" description="События фонда, объявления и истории поддержки студентов ENU." />
+      <PageHero
+        title={settings.news_hero_title ?? fallbackSettings.news_hero_title ?? 'Новости'}
+        description={settings.news_hero_description ?? fallbackSettings.news_hero_description ?? 'События фонда, объявления и истории поддержки студентов АТУ.'}
+      />
       <section className="section-pad bg-white">
         <div className="container-premium">
-          <SectionHeader title="Последние публикации" />
+          <SectionHeader title={settings.news_section_title ?? fallbackSettings.news_section_title ?? 'Последние публикации'} />
           <div className="mt-14 grid gap-7 lg:grid-cols-3">
-            {fallbackNews.map((item, index) => (
+            {news.map((item, index) => (
               <AnimatedSection key={item.slug} delay={index * 0.08} className="group premium-card overflow-hidden">
                 <img src={item.image_url ?? referenceImages.talent} alt={item.title} className="h-64 w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
                 <div className="p-6">

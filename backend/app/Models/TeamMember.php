@@ -10,6 +10,16 @@ class TeamMember extends Model
         'name',
         'role',
         'photo',
-        'bio',
+        'regalia',
+        'category',
+        'sort_order',
+        'is_active',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
 }

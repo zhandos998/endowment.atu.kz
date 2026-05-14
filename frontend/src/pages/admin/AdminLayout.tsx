@@ -1,8 +1,9 @@
 import { LayoutDashboard, LogOut } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { referenceImages } from '../../data/fallback';
 import { useAuthStore } from '../../store/authStore';
-import { entityConfigs } from './entityConfigs';
+import { adminSections, siteSettingsAdminItem } from './adminSections';
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -13,29 +14,32 @@ export default function AdminLayout() {
     navigate('/admin/login');
   }
 
+  const navItems: { path: string; title: string; icon: LucideIcon; end?: boolean }[] = [
+    { path: '', title: 'Dashboard', icon: LayoutDashboard, end: true },
+    ...adminSections.map((section) => ({ path: section.path, title: section.title, icon: section.icon })),
+    { path: siteSettingsAdminItem.path, title: siteSettingsAdminItem.title, icon: siteSettingsAdminItem.icon },
+  ];
+
   return (
-    <main className="min-h-screen bg-slate-100 text-slate-900 lg:grid lg:grid-cols-[280px_1fr]">
+    <main className="min-h-screen bg-slate-100 text-slate-900 lg:grid lg:grid-cols-[300px_1fr]">
       <aside className="border-r border-slate-200 bg-white">
         <div className="flex h-20 items-center gap-3 border-b border-slate-200 px-6">
-          <img src={referenceImages.logo} alt="ENU" className="h-11 rounded-sm object-contain" />
-          <div className="text-sm font-bold leading-5 text-navy">ENU Admin</div>
+          <img src={referenceImages.logo} alt="АТУ" className="h-11 rounded-sm object-contain invert" />
+          {/* <div>
+            <div className="text-sm font-bold leading-5 text-navy">ATU Admin</div>
+            <div className="text-xs text-slate-500">Управление сайтом</div>
+          </div> */}
         </div>
         <nav className="grid gap-1 p-4">
-          <NavLink
-            to="/admin"
-            end
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition ${isActive ? 'bg-accent text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy'}`
-            }
-          >
-            <LayoutDashboard size={18} /> Dashboard
-          </NavLink>
-          {entityConfigs.map((item) => {
+          {navItems.map((item) => {
             const Icon = item.icon;
+            const to = item.path ? `/admin/${item.path}` : '/admin';
+
             return (
               <NavLink
-                key={item.path}
-                to={`/admin/${item.path}`}
+                key={item.path || 'dashboard'}
+                to={to}
+                end={item.end}
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold transition ${isActive ? 'bg-accent text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-navy'}`
                 }

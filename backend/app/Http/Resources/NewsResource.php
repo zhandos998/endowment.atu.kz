@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\Concerns\ResolvesMediaUrls;
+use App\Support\HtmlSanitizer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +23,7 @@ class NewsResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
-            'content' => $this->content,
+            'content' => HtmlSanitizer::sanitize($this->content),
             'image' => $this->image,
             'image_url' => $this->mediaUrl($this->image),
             'published_at' => $this->published_at?->toISOString(),

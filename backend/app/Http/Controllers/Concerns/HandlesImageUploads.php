@@ -7,18 +7,23 @@ use Illuminate\Support\Facades\Storage;
 
 trait HandlesImageUploads
 {
-    protected function storeUploadedImage(Request $request, string $field, string $directory, ?string $current = null): ?string
+    protected function storeUploadedFile(Request $request, string $field, string $directory, ?string $current = null): ?string
     {
         if (! $request->hasFile($field)) {
             return $current;
         }
 
-        $this->deleteStoredImage($current);
+        $this->deleteStoredFile($current);
 
         return $request->file($field)->store($directory, 'public');
     }
 
-    protected function deleteStoredImage(?string $path): void
+    protected function storeUploadedImage(Request $request, string $field, string $directory, ?string $current = null): ?string
+    {
+        return $this->storeUploadedFile($request, $field, $directory, $current);
+    }
+
+    protected function deleteStoredFile(?string $path): void
     {
         if (! $path || str_starts_with($path, 'http')) {
             return;
@@ -27,5 +32,10 @@ trait HandlesImageUploads
         if (Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    protected function deleteStoredImage(?string $path): void
+    {
+        $this->deleteStoredFile($path);
     }
 }
