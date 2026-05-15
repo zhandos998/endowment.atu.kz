@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::query()->updateOrCreate(
-            ['email' => 'admin@atu.edu.kz'],
+            ['email' => 'endowment@atu.edu.kz'],
             [
                 'name' => 'Администратор ATU Endowment Fund',
                 'password' => Hash::make('password'),
